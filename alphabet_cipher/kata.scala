@@ -7,13 +7,35 @@ case class Alphabet(value: String = "abcdefghijklmnopqrstuvwxyz") extends AnyVal
     val (l, r) = value.splitAt(value.indexOf(c))
     Alphabet((r ++ l).mkString)
 
+  def indexOf(c: Char): Int = value.indexOf(c)
+
+  def charAt(i: Int): Char = value.charAt(i)
+
+  override def toString(): String = value
+
 end Alphabet
 
 case class Codec(alphabet: Alphabet):
 
-  def encode(msg: String, keyword: String): String = ???
+  def encode(msg: String, keyword: String): String =
+    zip(msg, keyword)
+      .foldRight(List.empty[Char]) { case ((c, k), acc) =>
+        alphabet.startingAt(k).charAt(alphabet.indexOf(c)) :: acc
+      }
+      .mkString
 
   def decode(msg: String, keyword: String): String = ???
 end Codec
 
 def crack(alphabet: Alphabet, msg: String, encodedMsg: String): String = ???
+
+def zip(message: String, keyword: String): List[(Char, Char)] = {
+
+  def go(msg: List[Char], key: List[Char], acc: List[(Char, Char)]): List[(Char, Char)] =
+    (msg, key) match
+      case (Nil, _)           => acc
+      case (c :: cs, k :: ks) => go(cs, ks, acc :+ (k, c))
+      case (_ :: _, Nil)      => go(msg, keyword.toLowerCase().toList, acc)
+
+  go(message.toLowerCase().toList, keyword.toLowerCase().toList, List.empty)
+}
