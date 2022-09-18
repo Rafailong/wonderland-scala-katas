@@ -3,7 +3,9 @@ package alphabet_chiper
 
 case class Alphabet(value: String = "abcdefghijklmnopqrstuvwxyz") extends AnyVal:
 
-  def startingAt(c: Char): Alphabet = ???
+  def startingAt(c: Char): Alphabet =
+    val (l, r) = value.splitAt(value.indexOf(c))
+    Alphabet((r ++ l).mkString)
 
 end Alphabet
 

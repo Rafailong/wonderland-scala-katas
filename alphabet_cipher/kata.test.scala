@@ -9,7 +9,7 @@ class tests extends FunSuite:
 
   val alphabet = Alphabet()
 
-  test("an Alphabet can be started from given a given char") {
+  test("an Alphabet can start from a given char") {
     ('a' to 'z').foreach { c =>
       val value = alphabet.startingAt(c).value.head
       assertEquals(value, c, s"expected=$c - actual=$value")
