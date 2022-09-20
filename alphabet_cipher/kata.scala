@@ -1,6 +1,8 @@
 //> using scala "3.2.0"
 package alphabet_chiper
 
+import scala.util.chaining
+
 case class Alphabet(value: String = "abcdefghijklmnopqrstuvwxyz") extends AnyVal:
 
   def startingAt(c: Char): Alphabet =
@@ -24,7 +26,14 @@ case class Codec(alphabet: Alphabet):
       }
       .mkString
 
-  def decode(msg: String, keyword: String): String = ???
+  def decode(message: String, keyword: String): String =
+    zip(message, keyword)
+      .foldRight(List.empty[Char]) { case ((c, k), acc) =>
+        alphabet.charAt(
+          alphabet.startingAt(c).indexOf(k)
+        ) :: acc
+      }
+      .mkString
 end Codec
 
 def crack(alphabet: Alphabet, msg: String, encodedMsg: String): String = ???
