@@ -36,7 +36,16 @@ case class Codec(alphabet: Alphabet):
       .mkString
 end Codec
 
-def crack(alphabet: Alphabet, msg: String, encodedMsg: String): String = ???
+def crack(alphabet: Alphabet, msg: String, encodedMsg: String): String = {
+  val matrix = alphabet.value.map(c => alphabet.startingAt(c).value.toVector)
+  zip(msg, encodedMsg).map { case (e, o) =>
+    val oI = alphabet.indexOf(o)
+    matrix
+      .find(abc => abc.indexOf(e) == oI)
+      .get
+      .head
+  }.mkString
+}
 
 def zip(message: String, keyword: String): List[(Char, Char)] = {
 
